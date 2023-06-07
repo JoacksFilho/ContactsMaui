@@ -1,4 +1,6 @@
 using Contacts.Maui.Models;
+using System.Collections.ObjectModel;
+
 namespace Contacts.Maui.Views;
 
 public partial class ContactsPage : ContentPage
@@ -7,11 +9,16 @@ public partial class ContactsPage : ContentPage
 	{
 		InitializeComponent();
 
-        List<ContactModel> contacts = ContactRepository.GetContacts(); 
-			
-		listContacts.ItemsSource = contacts;
 	}
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
 
+        var contacts = new ObservableCollection<ContactModel>(ContactRepository.GetContacts());
+        //ObservableCollection é capaz de notificar a view quando tem alguma alteração nos dados e atualiza-los. 
+
+        listContacts.ItemsSource = contacts;
+    }
 
     private async void listContacts_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
